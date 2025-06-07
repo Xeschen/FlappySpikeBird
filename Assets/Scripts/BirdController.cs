@@ -1,11 +1,15 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class BirdController : MonoBehaviour
 {
     public static event Action<float> OnDirectionChanged; // Event to notify direction changes
+
+    public Sprite birdUp;
+    public Sprite birdDown;
 
     public float velocityX;
     public float jumpForce;
@@ -13,6 +17,7 @@ public class BirdController : MonoBehaviour
 
     private RectTransform birdUI;
     private Rigidbody2D rb;
+    private Image image;
     private float direction = 1f; // Direction multiplier for horizontal movement
     private bool jumpRequest = false;
 
@@ -22,6 +27,7 @@ public class BirdController : MonoBehaviour
         birdUI = GetComponent<RectTransform>();
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale; // Set the gravity scale for the Rigidbody2D component
+        image = GetComponent<Image>();
 
         OnDirectionChanged?.Invoke(direction);
     }
@@ -38,6 +44,8 @@ public class BirdController : MonoBehaviour
         {
             jumpRequest = true;
         }
+
+        UpdateSprite();
     }
 
     private void FixedUpdate()
@@ -59,9 +67,25 @@ public class BirdController : MonoBehaviour
 
     void HorizontalMove()
     {
-        Vector2 velocity = rb.linearVelocity;
+        var velocity = rb.linearVelocity;
         velocity.x = velocityX * direction;
         rb.linearVelocity = velocity;
+    }
+
+    void UpdateSprite()
+    {
+        if (rb.linearVelocity.y > 0.1)
+        {
+            image.sprite = birdUp; // Upward movement
+        }
+        else if (rb.linearVelocity.y < -0.1)
+        {
+            image.sprite = birdDown; // Downward movement
+        }
+
+        var scale = transform.localScale;
+        scale.x = rb.linearVelocityX < 0 ? -1 : 1;
+        transform.localScale = scale;
     }
 
     public void OnCollisionEnter2D(Collision2D collision)

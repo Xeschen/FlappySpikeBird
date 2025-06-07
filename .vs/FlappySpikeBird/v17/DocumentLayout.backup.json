@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\\uAC15\uC131\uC911\\OneDrive\\\uBB38\uC11C\\GitHub\\FlappySpikeBird\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{394D3316-72B5-6224-B242-3D2BE3C86F3A}|Assembly-CSharp.csproj|C:\\Users\\\uAC15\uC131\uC911\\OneDrive\\\uBB38\uC11C\\GitHub\\FlappySpikeBird\\assets\\scripts\\birdcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{394D3316-72B5-6224-B242-3D2BE3C86F3A}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\birdcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{394D3316-72B5-6224-B242-3D2BE3C86F3A}|Assembly-CSharp.csproj|C:\\Users\\\uAC15\uC131\uC911\\OneDrive\\\uBB38\uC11C\\GitHub\\FlappySpikeBird\\assets\\scripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{394D3316-72B5-6224-B242-3D2BE3C86F3A}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{394D3316-72B5-6224-B242-3D2BE3C86F3A}|Assembly-CSharp.csproj|c:\\users\\\uAC15\uC131\uC911\\onedrive\\\uBB38\uC11C\\github\\flappyspikebird\\assets\\scripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{394D3316-72B5-6224-B242-3D2BE3C86F3A}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{394D3316-72B5-6224-B242-3D2BE3C86F3A}|Assembly-CSharp.csproj|c:\\users\\\uAC15\uC131\uC911\\onedrive\\\uBB38\uC11C\\github\\flappyspikebird\\assets\\scripts\\birdcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{394D3316-72B5-6224-B242-3D2BE3C86F3A}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\birdcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{394D3316-72B5-6224-B242-3D2BE3C86F3A}|Assembly-CSharp.csproj|C:\\Users\\\uAC15\uC131\uC911\\OneDrive\\\uBB38\uC11C\\GitHub\\FlappySpikeBird\\assets\\scripts\\spikemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -22,30 +22,30 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "GameManager.cs",
               "DocumentMoniker": "C:\\Users\\\uAC15\uC131\uC911\\OneDrive\\\uBB38\uC11C\\GitHub\\FlappySpikeBird\\Assets\\Scripts\\GameManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\GameManager.cs",
               "ToolTip": "C:\\Users\\\uAC15\uC131\uC911\\OneDrive\\\uBB38\uC11C\\GitHub\\FlappySpikeBird\\Assets\\Scripts\\GameManager.cs",
               "RelativeToolTip": "Assets\\Scripts\\GameManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-07T08:56:55.122Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "BirdController.cs",
               "DocumentMoniker": "C:\\Users\\\uAC15\uC131\uC911\\OneDrive\\\uBB38\uC11C\\GitHub\\FlappySpikeBird\\Assets\\Scripts\\BirdController.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\BirdController.cs",
               "ToolTip": "C:\\Users\\\uAC15\uC131\uC911\\OneDrive\\\uBB38\uC11C\\GitHub\\FlappySpikeBird\\Assets\\Scripts\\BirdController.cs",
               "RelativeToolTip": "Assets\\Scripts\\BirdController.cs",
-              "ViewState": "AgIAACoAAAAAAAAAAAAIwEwAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAuwEwAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-05T11:01:49.011Z",
               "EditorCaption": ""
