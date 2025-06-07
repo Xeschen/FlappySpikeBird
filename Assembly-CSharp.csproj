@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\SpikeManager.cs" />
     <Compile Include="Assets\Scripts\BirdController.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

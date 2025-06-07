@@ -70,6 +70,11 @@ public class BirdController : MonoBehaviour
         {
             direction *= -1f;
             OnDirectionChanged?.Invoke(direction); // Notify subscribers of the direction change
+
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.AddScore(1); // Increase score by 1 on wall collision
+            }
         }
         else if (collision.gameObject.CompareTag("Spike"))
         {
