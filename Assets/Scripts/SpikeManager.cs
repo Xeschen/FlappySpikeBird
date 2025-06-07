@@ -1,10 +1,30 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class SpikeManager : MonoBehaviour
 {
-    [Header("Spike GameObjects")]
-    public GameObject leftSpike;
-    public GameObject rightSpike;
+    [Header("Spike Parents")]
+    public Transform leftSpikeParent;
+    public Transform rightSpikeParent;
+
+    private List<GameObject> leftSpikes = new List<GameObject>();
+    private List<GameObject> rightSpikes = new List<GameObject>();
+
+    private void Awake()
+    {
+        // 하위 오브젝트 수집
+        foreach (Transform child in leftSpikeParent)
+        {
+            leftSpikes.Add(child.gameObject);
+            child.gameObject.SetActive(false);
+        }
+
+        foreach (Transform child in rightSpikeParent)
+        {
+            rightSpikes.Add(child.gameObject);
+            child.gameObject.SetActive(false);
+        }
+    }
 
     private void OnEnable()
     {
@@ -20,15 +40,36 @@ public class SpikeManager : MonoBehaviour
     {
         if (direction > 0)
         {
-            // 오른쪽으로 이동 → 오른쪽 가시 활성화, 왼쪽 비활성화
-            rightSpike.SetActive(true);
-            leftSpike.SetActive(false);
+            ActivateRandomSpike(rightSpikes);
+            DeactivateAll(leftSpikes);
         }
         else
         {
-            // 왼쪽으로 이동 → 왼쪽 가시 활성화, 오른쪽 비활성화
-            leftSpike.SetActive(true);
-            rightSpike.SetActive(false);
+            ActivateRandomSpike(leftSpikes);
+            DeactivateAll(rightSpikes);
+        }
+    }
+
+    void ActivateRandomSpike(List<GameObject> spikeList)
+    {
+        if (spikeList.Count == 0) return;
+
+        // 모든 비활성화
+        foreach (var spike in spikeList)
+        {
+            spike.SetActive(false);
+        }
+
+        // 랜덤 하나만 활성화
+        int index = Random.Range(0, spikeList.Count);
+        spikeList[index].SetActive(true);
+    }
+
+    void DeactivateAll(List<GameObject> spikeList)
+    {
+        foreach (var spike in spikeList)
+        {
+            spike.SetActive(false);
         }
     }
 }

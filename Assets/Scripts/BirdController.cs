@@ -22,6 +22,8 @@ public class BirdController : MonoBehaviour
         birdUI = GetComponent<RectTransform>();
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = gravityScale; // Set the gravity scale for the Rigidbody2D component
+
+        OnDirectionChanged?.Invoke(direction);
     }
 
     // Update is called once per frame
