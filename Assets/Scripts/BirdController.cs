@@ -20,6 +20,7 @@ public class BirdController : MonoBehaviour
     private Image image;
     private float direction = 1f; // Direction multiplier for horizontal movement
     private bool jumpRequest = false;
+    private bool isDead = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -35,6 +36,8 @@ public class BirdController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isDead) return;
+
         if (birdUI != null)
         {
             birdUI.position = transform.position;
@@ -50,6 +53,8 @@ public class BirdController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isDead) return;
+
         if (jumpRequest)
         {
             Jump();
@@ -102,7 +107,8 @@ public class BirdController : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Spike"))
         {
-            rb.simulated = false; // Disable physics simulation on collision with spikes
+            isDead = true;
+            image.color = Color.Lerp(image.color, Color.gray, 0.6f);
         }
     }
 }
