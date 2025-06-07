@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class BirdController : MonoBehaviour
 {
+    public static event Action<float> OnDirectionChanged; // Event to notify direction changes
+
     public float velocityX;
     public float jumpForce;
     public float gravityScale; // Gravity scale for the Rigidbody2D component
@@ -64,6 +67,11 @@ public class BirdController : MonoBehaviour
         if (collision.gameObject.CompareTag("Wall"))
         {
             direction *= -1f;
+            OnDirectionChanged?.Invoke(direction); // Notify subscribers of the direction change
+        }
+        else if (collision.gameObject.CompareTag("Spike"))
+        {
+            rb.simulated = false; // Disable physics simulation on collision with spikes
         }
     }
 }
