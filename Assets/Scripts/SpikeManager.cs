@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SpikeManager : MonoBehaviour
 {
+    public int spikePerScore;
+    public int maxSpikes = 5; // 최대 활성화 스파이크 수
+
     [Header("Spike Parents")]
     public Transform leftSpikeParent;
     public Transform rightSpikeParent;
@@ -38,19 +42,21 @@ public class SpikeManager : MonoBehaviour
 
     void HandleDirectionChanged(float direction)
     {
+        var count = Mathf.Min(GameManager.Instance.score / spikePerScore + 1, maxSpikes); // 현재 스코어에 따라 활성화할 스파이크 수
+
         if (direction > 0)
         {
-            ActivateRandomSpike(rightSpikes);
+            ActivateRandomSpike(rightSpikes, count);
             DeactivateAll(leftSpikes);
         }
         else
         {
-            ActivateRandomSpike(leftSpikes);
+            ActivateRandomSpike(leftSpikes, count);
             DeactivateAll(rightSpikes);
         }
     }
 
-    void ActivateRandomSpike(List<GameObject> spikeList)
+    void ActivateRandomSpike(List<GameObject> spikeList, int count)
     {
         if (spikeList.Count == 0) return;
 
@@ -60,9 +66,10 @@ public class SpikeManager : MonoBehaviour
             spike.SetActive(false);
         }
 
-        // 랜덤 하나만 활성화
-        int index = Random.Range(0, spikeList.Count);
-        spikeList[index].SetActive(true);
+        foreach (var spike in spikeList.OrderBy(u => Random.value).Take(Mathf.Min(count, spikeList.Count)))
+        {
+            spike.SetActive(true); // 랜덤으로 선택된 스파이크 활성화
+        }
     }
 
     void DeactivateAll(List<GameObject> spikeList)
