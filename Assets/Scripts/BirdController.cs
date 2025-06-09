@@ -18,8 +18,11 @@ public class BirdController : MonoBehaviour
     private RectTransform birdUI;
     private Rigidbody2D rb;
     private Image image;
+    private Vector3 initialPosition;
+    private bool positionInit = false;
     private float direction = 1f; // Direction multiplier for horizontal movement
     private bool jumpRequest = false;
+    private bool isSpiked = false;
     private bool isDead = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -30,13 +33,24 @@ public class BirdController : MonoBehaviour
         rb.gravityScale = gravityScale; // Set the gravity scale for the Rigidbody2D component
         image = GetComponent<Image>();
 
+        initialPosition = transform.position;
+        positionInit = true;
         OnDirectionChanged?.Invoke(direction);
+    }
+
+    private void OnEnable()
+    {
+        InitBird();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isDead) return;
+        if (isSpiked)
+        {
+            OnDead();
+            return;
+        }
 
         if (birdUI != null)
         {
@@ -53,7 +67,7 @@ public class BirdController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isDead) return;
+        if (isSpiked) return;
 
         if (jumpRequest)
         {
@@ -62,6 +76,20 @@ public class BirdController : MonoBehaviour
         }
 
         HorizontalMove();
+    }
+
+    void InitBird()
+    {
+        GameManager.Instance.ResetScore();
+        isSpiked = false;
+        isDead = false;
+        if (positionInit) transform.position = initialPosition;
+        if (image != null)
+        {
+            image.color = Color.white;
+        }
+        transform.localRotation = new Quaternion(0, 0, 0, 0);
+        direction = 1f;
     }
 
     void Jump()
@@ -95,7 +123,7 @@ public class BirdController : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Wall"))
+        if (collision.gameObject.CompareTag("Wall") && isSpiked == false)
         {
             direction *= -1f;
             OnDirectionChanged?.Invoke(direction); // Notify subscribers of the direction change
@@ -107,8 +135,17 @@ public class BirdController : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("Spike"))
         {
-            isDead = true;
-            image.color = Color.Lerp(image.color, Color.gray, 0.6f);
+            isSpiked = true;
+            image.color = Color.Lerp(image.color, Color.gray, 0.5f);
         }
+    }
+
+    private void OnDead()
+    {
+        if (isDead) return;
+        if (rb.linearVelocity.magnitude > 1) return;
+
+        isDead = true;
+        GameManager.Instance.EndGame();
     }
 }
