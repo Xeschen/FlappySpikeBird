@@ -3,10 +3,21 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    private const string PlayCountKey = "PlayCount";
+    private const string HighScoreKey = "HighScore";
+
     public static GameManager Instance;
-    
+
+    public Text scoreText;
+    public Text highScoreText;
+    public Text playCountText;
+    public Text endHighScoreText;
+    public Text endBestScoreText;
+    private bool isBestScore = false;
+
     public int score = 0;
-    public Text scoreText; // UI 텍스트 오브젝트 연결
+    private int highScore;
+    private int playCount;
 
     private GameState currentState;
     [SerializeField] private GameObject mainUI;
@@ -32,6 +43,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         SetState(GameState.Main);
+        LoadGameData();
+        UpdateScoreUI();
     }
 
 
@@ -53,6 +66,16 @@ public class GameManager : MonoBehaviour
         {
             scoreText.text = score.ToString();
         }
+
+        if (highScoreText != null)
+        {
+            highScoreText.text = "BEST SCORE: " + highScore.ToString();
+        }
+
+        if (playCountText!= null)
+        {
+            playCountText.text = "GAMES PLAYED: " + playCount.ToString();
+        }
     }
 
     void SetState(GameState state)
@@ -68,6 +91,7 @@ public class GameManager : MonoBehaviour
     public void OnStartButtonClicked()
     {
         SetState(GameState.Play);
+        IncrementPlayCount();
     }
 
     public void OnToTitleButtonClicked()
@@ -78,11 +102,55 @@ public class GameManager : MonoBehaviour
     public void OnRetryButtonClicked()
     {
         SetState(GameState.Play);
+        IncrementPlayCount();
+    }
+
+    public void OnResetButtonClicked()
+    {
+        highScore = 0;
+        playCount = 0;
+        PlayerPrefs.SetInt(HighScoreKey, highScore);
+        PlayerPrefs.SetInt(PlayCountKey, playCount);
+        UpdateScoreUI();
     }
 
     public void EndGame()
     {
         SetState(GameState.End);
+        
+        isBestScore = highScore < score;
+        highScore = Mathf.Max(highScore, score);
+        PlayerPrefs.SetInt(HighScoreKey, highScore);
+
+        if (endHighScoreText != null)
+        {
+            endHighScoreText.text = "BEST SCORE: " + highScore.ToString();
+        }
+
+        if (endBestScoreText!= null)
+        {
+            if (isBestScore)
+            {
+                endHighScoreText.text = "";
+                endBestScoreText.text = "NEW BEST SCORE!!";
+            }
+            else
+            {
+                endBestScoreText.text = "";
+            }
+        }
+    }
+
+    private void IncrementPlayCount()
+    {
+        playCount += 1;
+        PlayerPrefs.SetInt(PlayCountKey, playCount);
+    }
+
+    private void LoadGameData()
+    {
+        highScore = PlayerPrefs.GetInt(HighScoreKey, 0);
+        playCount = PlayerPrefs.GetInt(PlayCountKey, 0);
     }
 }
 
