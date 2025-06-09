@@ -59,6 +59,7 @@ public class BirdController : MonoBehaviour
 
         if (Mouse.current.leftButton.wasPressedThisFrame) // Check if the left mouse button was pressed this frame
         {
+            AudioManager.Instance.PlayJump(); // Play jump sound
             jumpRequest = true;
         }
 
@@ -127,16 +128,14 @@ public class BirdController : MonoBehaviour
         {
             direction *= -1f;
             OnDirectionChanged?.Invoke(direction); // Notify subscribers of the direction change
-
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.AddScore(1); // Increase score by 1 on wall collision
-            }
+            GameManager.Instance.AddScore(1); // Increase score by 1 on wall collision
+            AudioManager.Instance.PlayBounce(); // Play bounce sound
         }
         else if (collision.gameObject.CompareTag("Spike"))
         {
             isSpiked = true;
             image.color = Color.Lerp(image.color, Color.gray, 0.5f);
+            AudioManager.Instance.PlaySpikeHit(); // Play spike hit sound
         }
     }
 
@@ -147,5 +146,6 @@ public class BirdController : MonoBehaviour
 
         isDead = true;
         GameManager.Instance.EndGame();
+        AudioManager.Instance.PlayGameEnd(); // Play game end sound
     }
 }

@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\SpikeManager.cs" />
+    <Compile Include="Assets\Scripts\AudioManager.cs" />
     <Compile Include="Assets\Scripts\BirdController.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
   </ItemGroup>
