@@ -14,9 +14,9 @@ public class BackgroundManager: MonoBehaviour
         else Destroy(gameObject);
     }
 
-    public void SetBackground(int difficulty)
+    public void SetBackground(int score, int difficultyUnit)
     {
-        int index = Mathf.Clamp(difficulty, 0, difficultyColors.Length - 1);
+        int index = (score / difficultyUnit) % difficultyColors.Length;
 
         if (image != null)
         {

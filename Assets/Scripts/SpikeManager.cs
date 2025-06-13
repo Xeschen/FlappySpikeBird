@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class SpikeManager : MonoBehaviour
 {
-    public int spikePerScore;
+    public static SpikeManager Instance;
+
     public int maxSpikes = 5; // 최대 활성화 스파이크 수
 
     [Header("Spike Parents")]
@@ -16,6 +17,16 @@ public class SpikeManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         // 하위 오브젝트 수집
         foreach (Transform child in leftSpikeParent)
         {
@@ -30,19 +41,9 @@ public class SpikeManager : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    public void ActivateSpike(int direction, int difficulty)
     {
-        BirdController.OnDirectionChanged += HandleDirectionChanged;
-    }
-
-    private void OnDisable()
-    {
-        BirdController.OnDirectionChanged -= HandleDirectionChanged;
-    }
-
-    void HandleDirectionChanged(float direction)
-    {
-        var count = Mathf.Min(GameManager.Instance.score / spikePerScore + 1, maxSpikes); // 현재 스코어에 따라 활성화할 스파이크 수
+        var count = Mathf.Min(difficulty, maxSpikes); // 현재 스코어에 따라 활성화할 스파이크 수
 
         if (direction > 0)
         {

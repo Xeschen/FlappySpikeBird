@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class BirdController : MonoBehaviour
 {
     public static BirdController Instance; // Singleton instance for easy access
-    public static event Action<float> OnDirectionChanged; // Event to notify direction changes
+    public static event Action OnDirectionChanged; // Event to notify direction changes
+    public static event Action OnDead;
 
     public Sprite birdUp;
     public Sprite birdDown;
@@ -15,13 +16,13 @@ public class BirdController : MonoBehaviour
     public float velocityX;
     public float jumpForce;
     public float gravityScale; // Gravity scale for the Rigidbody2D component
+    public float direction = 1f; // Direction multiplier for horizontal movement
 
     private RectTransform birdUI;
     private Rigidbody2D rb;
     private Image image;
     private Vector3 initialPosition;
     private bool positionInit = false;
-    private float direction = 1f; // Direction multiplier for horizontal movement
     private bool isSpiked = false;
     private bool isDead = false;
 
@@ -31,7 +32,6 @@ public class BirdController : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         birdUI = GetComponent<RectTransform>();
@@ -41,7 +41,7 @@ public class BirdController : MonoBehaviour
 
         initialPosition = transform.position;
         positionInit = true;
-        OnDirectionChanged?.Invoke(direction);
+        OnDirectionChanged?.Invoke();
     }
 
     private void OnEnable()
@@ -49,12 +49,16 @@ public class BirdController : MonoBehaviour
         InitBird();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isSpiked)
         {
-            OnDead();
+            if (isDead) return;
+            if (rb.linearVelocity.magnitude > 1) return;
+
+            isDead = true;
+            OnDead.Invoke();
+
             return;
         }
 
@@ -129,9 +133,7 @@ public class BirdController : MonoBehaviour
         if (collision.gameObject.CompareTag("Wall") && isSpiked == false)
         {
             direction *= -1f;
-            OnDirectionChanged?.Invoke(direction); // Notify subscribers of the direction change
-            GameManager.Instance.AddScore(1); // Increase score by 1 on wall collision
-            AudioManager.Instance.PlayBounce(); // Play bounce sound
+            OnDirectionChanged?.Invoke();
         }
         else if (collision.gameObject.CompareTag("Spike"))
         {
@@ -139,15 +141,5 @@ public class BirdController : MonoBehaviour
             image.color = Color.Lerp(image.color, Color.gray, 0.5f);
             AudioManager.Instance.PlaySpikeHit(); // Play spike hit sound
         }
-    }
-
-    private void OnDead()
-    {
-        if (isDead) return;
-        if (rb.linearVelocity.magnitude > 1) return;
-
-        isDead = true;
-        GameManager.Instance.EndGame();
-        AudioManager.Instance.PlayGameEnd(); // Play game end sound
     }
 }

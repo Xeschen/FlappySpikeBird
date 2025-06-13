@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class GameManager : MonoBehaviour
 {
@@ -47,15 +48,29 @@ public class GameManager : MonoBehaviour
         UpdateScoreUI();
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        BackgroundManager.Instance.SetBackground(score / difficultyUnit);
+        BirdController.OnDirectionChanged += AddScore;
+        BirdController.OnDead+= EndGame;
     }
 
-    public void AddScore(int value)
+    private void OnDisable()
     {
-        score += value;
+        BirdController.OnDirectionChanged -= AddScore;
+        BirdController.OnDead -= EndGame;
+    }
+
+    private void Update()
+    {
+        BackgroundManager.Instance.SetBackground(score, difficultyUnit);
+    }
+
+    public void AddScore()
+    {
+        score += 1;
         UpdateScoreUI();
+        AudioManager.Instance.PlayBounce(); // Play bounce sound
+        SpikeManager.Instance.ActivateSpike((int)BirdController.Instance.direction, score / difficultyUnit);
     }
 
     public void ResetScore()
@@ -143,6 +158,8 @@ public class GameManager : MonoBehaviour
                 endBestScoreText.text = "";
             }
         }
+
+        AudioManager.Instance.PlayGameEnd(); // Play game end sound
     }
 
     private void IncrementPlayCount()
