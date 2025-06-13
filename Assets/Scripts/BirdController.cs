@@ -6,6 +6,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody2D))]
 public class BirdController : MonoBehaviour
 {
+    public static BirdController Instance; // Singleton instance for easy access
     public static event Action<float> OnDirectionChanged; // Event to notify direction changes
 
     public Sprite birdUp;
@@ -21,9 +22,14 @@ public class BirdController : MonoBehaviour
     private Vector3 initialPosition;
     private bool positionInit = false;
     private float direction = 1f; // Direction multiplier for horizontal movement
-    private bool jumpRequest = false;
     private bool isSpiked = false;
     private bool isDead = false;
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -60,7 +66,6 @@ public class BirdController : MonoBehaviour
         if (Mouse.current.leftButton.wasPressedThisFrame) // Check if the left mouse button was pressed this frame
         {
             AudioManager.Instance.PlayJump(); // Play jump sound
-            jumpRequest = true;
         }
 
         UpdateSprite();
@@ -69,12 +74,6 @@ public class BirdController : MonoBehaviour
     private void FixedUpdate()
     {
         if (isSpiked) return;
-
-        if (jumpRequest)
-        {
-            Jump();
-            jumpRequest = false;
-        }
 
         HorizontalMove();
     }
@@ -93,8 +92,10 @@ public class BirdController : MonoBehaviour
         direction = 1f;
     }
 
-    void Jump()
+    public void Jump()
     {
+        if (isSpiked) return;
+
         rb.linearVelocity = new Vector2(velocityX * direction, 0); // 연속점프 초기화
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
@@ -108,6 +109,7 @@ public class BirdController : MonoBehaviour
 
     void UpdateSprite()
     {
+        if (image == null) return; // Ensure image is not null before accessing it
         if (rb.linearVelocity.y > 0.1)
         {
             image.sprite = birdUp; // Upward movement

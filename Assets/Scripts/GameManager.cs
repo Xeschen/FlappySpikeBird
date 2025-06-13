@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     private const string HighScoreKey = "HighScore";
 
     public static GameManager Instance;
+    public GameState CurrentState => currentState;
 
     public Text scoreText;
     public Text highScoreText;
@@ -36,8 +37,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        DontDestroyOnLoad(gameObject); // 씬 전환 시 유지 (선택)
     }
 
     void Start()
@@ -88,24 +87,24 @@ public class GameManager : MonoBehaviour
         playUI.SetActive(currentState == GameState.Play || currentState == GameState.End);
     }
 
-    public void OnStartButtonClicked()
+    public void StartPlay()
     {
         SetState(GameState.Play);
         IncrementPlayCount();
     }
 
-    public void OnToTitleButtonClicked()
+    public void ToTitle()
     {
         SetState(GameState.Main);
     }
 
-    public void OnRetryButtonClicked()
+    public void Retry()
     {
         SetState(GameState.Play);
         IncrementPlayCount();
     }
 
-    public void OnResetButtonClicked()
+    public void ResetData()
     {
         highScore = 0;
         playCount = 0;
