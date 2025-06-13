@@ -43,7 +43,7 @@ public class SpikeManager : MonoBehaviour
 
     public void ActivateSpike(int direction, int difficulty)
     {
-        var count = Mathf.Min(difficulty, maxSpikes); // 현재 스코어에 따라 활성화할 스파이크 수
+        var count = Mathf.Max(1, Mathf.Min(difficulty, maxSpikes)); // 현재 스코어에 따라 활성화할 스파이크 수
 
         if (direction > 0)
         {

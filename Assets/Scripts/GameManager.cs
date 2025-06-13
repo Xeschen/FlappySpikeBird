@@ -111,6 +111,7 @@ public class GameManager : MonoBehaviour
     {
         SetState(GameState.Play);
         IncrementPlayCount();
+        SpikeManager.Instance.ActivateSpike(1, 0);
 
 #if UNITY_EDITOR
         Cursor.lockState = CursorLockMode.Confined;
@@ -121,12 +122,19 @@ public class GameManager : MonoBehaviour
     public void ToTitle()
     {
         SetState(GameState.Main);
+        BackgroundManager.Instance.SetBackground(0, difficultyUnit);
     }
 
     public void Retry()
     {
         SetState(GameState.Play);
         IncrementPlayCount();
+        SpikeManager.Instance.ActivateSpike(1, 0);
+
+#if UNITY_EDITOR
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = false;
+#endif
     }
 
     public void ResetData()
