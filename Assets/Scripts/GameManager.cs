@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     private bool isBestScore = false;
 
     public int score = 0;
+    public int difficultyUnit = 5;
     private int highScore;
     private int playCount;
 
@@ -46,6 +47,10 @@ public class GameManager : MonoBehaviour
         UpdateScoreUI();
     }
 
+    private void Update()
+    {
+        BackgroundManager.Instance.SetBackground(score / difficultyUnit);
+    }
 
     public void AddScore(int value)
     {
