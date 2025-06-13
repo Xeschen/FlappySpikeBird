@@ -51,13 +51,13 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         BirdController.OnDirectionChanged += AddScore;
-        BirdController.OnDead+= EndGame;
+        BirdController.OnDead+= EndPlay;
     }
 
     private void OnDisable()
     {
         BirdController.OnDirectionChanged -= AddScore;
-        BirdController.OnDead -= EndGame;
+        BirdController.OnDead -= EndPlay;
     }
 
     private void Update()
@@ -111,6 +111,11 @@ public class GameManager : MonoBehaviour
     {
         SetState(GameState.Play);
         IncrementPlayCount();
+
+#if UNITY_EDITOR
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = false;
+#endif
     }
 
     public void ToTitle()
@@ -133,7 +138,7 @@ public class GameManager : MonoBehaviour
         UpdateScoreUI();
     }
 
-    public void EndGame()
+    public void EndPlay()
     {
         SetState(GameState.End);
         
@@ -160,6 +165,11 @@ public class GameManager : MonoBehaviour
         }
 
         AudioManager.Instance.PlayGameEnd(); // Play game end sound
+
+#if UNITY_EDITOR
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+#endif
     }
 
     private void IncrementPlayCount()
