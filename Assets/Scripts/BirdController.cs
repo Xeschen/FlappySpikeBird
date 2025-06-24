@@ -84,7 +84,6 @@ public class BirdController : MonoBehaviour
 
     void InitBird()
     {
-        GameManager.Instance.ResetScore();
         isSpiked = false;
         isDead = false;
         if (positionInit) transform.position = initialPosition;
@@ -135,7 +134,7 @@ public class BirdController : MonoBehaviour
             direction *= -1f;
             OnDirectionChanged?.Invoke();
         }
-        else if (collision.gameObject.CompareTag("Spike"))
+        else if (collision.gameObject.CompareTag("Spike") && isDead == false)
         {
             isSpiked = true;
             image.color = Color.Lerp(image.color, Color.gray, 0.5f);

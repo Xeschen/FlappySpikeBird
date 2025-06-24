@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject mainUI;
     [SerializeField] private GameObject playUI;
     [SerializeField] private GameObject endUI;
+    [SerializeField] private GameObject leftSpikes;
+    [SerializeField] private GameObject rightSpikes;
 
     private void Awake()
     {
@@ -45,6 +47,7 @@ public class GameManager : MonoBehaviour
     {
         SetState(GameState.Main);
         LoadGameData();
+        ResetScore();
         UpdateScoreUI();
     }
 
@@ -104,20 +107,23 @@ public class GameManager : MonoBehaviour
 
         mainUI.SetActive(currentState == GameState.Main);
         endUI.SetActive(currentState == GameState.End);
-        playUI.SetActive(currentState == GameState.Play || currentState == GameState.End);
+        var isPlaying = currentState == GameState.Play || currentState == GameState.End;
+        playUI.SetActive(isPlaying);
+        leftSpikes.SetActive(isPlaying);
+        rightSpikes.SetActive(isPlaying);
     }
 
     public void StartPlay()
     {
+        ResetScore();
         SetState(GameState.Play);
         IncrementPlayCount();
         SpikeManager.Instance.ActivateSpike(1, 0);
 
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
         Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = false;
 #endif
-    }
+*/    }
 
     public void ToTitle()
     {
@@ -127,15 +133,15 @@ public class GameManager : MonoBehaviour
 
     public void Retry()
     {
+        ResetScore();
         SetState(GameState.Play);
         IncrementPlayCount();
         SpikeManager.Instance.ActivateSpike(1, 0);
 
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
         Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = false;
 #endif
-    }
+*/    }
 
     public void ResetData()
     {
@@ -174,11 +180,10 @@ public class GameManager : MonoBehaviour
 
         AudioManager.Instance.PlayGameEnd(); // Play game end sound
 
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
         Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
 #endif
-    }
+*/    }
 
     private void IncrementPlayCount()
     {

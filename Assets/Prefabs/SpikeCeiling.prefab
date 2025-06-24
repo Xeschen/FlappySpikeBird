@@ -10,10 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7139402212652581727}
   - component: {fileID: 3699865673093865776}
-  - component: {fileID: 4766103937968971371}
   - component: {fileID: 5721503688836203659}
   m_Layer: 0
-  m_Name: SpikeWall
+  m_Name: SpikeCeiling
   m_TagString: Spike
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81,26 +80,9 @@ PolygonCollider2D:
   m_Points:
     m_Paths:
     - - {x: 1.28, y: -1.28}
-      - {x: 0, y: 1.2}
+      - {x: 0, y: 0.95}
       - {x: -1.28, y: -1.28}
   m_UseDelaunayMesh: 0
---- !u!111 &4766103937968971371
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7154004311405751764}
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Animation: {fileID: 7400000, guid: 14b9cab781a6a0e45945a385e2a5d2da, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: 14b9cab781a6a0e45945a385e2a5d2da, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_UpdateMode: 0
-  m_CullingType: 0
 --- !u!212 &5721503688836203659
 SpriteRenderer:
   m_ObjectHideFlags: 0
