@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.Rendering.DebugUI;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,11 +10,11 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public GameState CurrentState => currentState;
 
-    public Text scoreText;
-    public Text highScoreText;
-    public Text playCountText;
-    public Text endHighScoreText;
-    public Text endBestScoreText;
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI mainBestScoreText;
+    public TextMeshProUGUI mainPlayCountText;
+    public TextMeshProUGUI endBestScoreText;
+    public TextMeshProUGUI endNewBestScoreText;
     private bool isBestScore = false;
 
     public int score = 0;
@@ -89,14 +89,14 @@ public class GameManager : MonoBehaviour
             scoreText.text = score.ToString();
         }
 
-        if (highScoreText != null)
+        if (mainBestScoreText != null)
         {
-            highScoreText.text = "BEST SCORE: " + highScore.ToString();
+            mainBestScoreText.text = "BEST SCORE: " + highScore.ToString();
         }
 
-        if (playCountText!= null)
+        if (mainPlayCountText!= null)
         {
-            playCountText.text = "GAMES PLAYED: " + playCount.ToString();
+            mainPlayCountText.text = "GAMES PLAYED: " + playCount.ToString();
         }
     }
 
@@ -185,21 +185,21 @@ public class GameManager : MonoBehaviour
         highScore = Mathf.Max(highScore, score);
         PlayerPrefs.SetInt(HighScoreKey, highScore);
 
-        if (endHighScoreText != null)
+        if (endBestScoreText != null)
         {
-            endHighScoreText.text = "BEST SCORE: " + highScore.ToString();
+            endBestScoreText.text = "BEST SCORE: " + highScore.ToString();
         }
 
-        if (endBestScoreText!= null)
+        if (endNewBestScoreText!= null)
         {
             if (isBestScore)
             {
-                endHighScoreText.text = "";
-                endBestScoreText.text = "NEW BEST SCORE!!";
+                endBestScoreText.text = "";
+                endNewBestScoreText.text = "NEW BEST SCORE!!";
             }
             else
             {
-                endBestScoreText.text = "";
+                endNewBestScoreText.text = "";
             }
         }
 

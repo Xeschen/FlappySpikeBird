@@ -47,7 +47,6 @@ public class BirdController : MonoBehaviour
         positionInit = true;
 
         SetPlayable(false);
-        OnDirectionChanged?.Invoke();
     }
 
     private void OnEnable()
@@ -68,12 +67,6 @@ public class BirdController : MonoBehaviour
             OnDead.Invoke();
 
             return;
-        }
-
-        // TODO 여기서 처리하면 안됨
-        if (Mouse.current.leftButton.wasPressedThisFrame) // Check if the left mouse button was pressed this frame
-        {
-            AudioManager.Instance.PlayJump(); // Play jump sound
         }
 
         UpdateSprite();
@@ -144,6 +137,8 @@ public class BirdController : MonoBehaviour
             trailParticle.transform.position = transform.position;
             trailParticle.Play();
         }
+
+        AudioManager.Instance.PlayJump();
     }
 
     private void HorizontalMove()
@@ -187,5 +182,6 @@ public class BirdController : MonoBehaviour
         var scale = transform.localScale;
         scale.x *= -1;
         transform.localScale = scale;
+        transform.localRotation = Quaternion.identity;
     }
 }

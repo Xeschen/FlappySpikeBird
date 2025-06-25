@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class BackgroundManager: MonoBehaviour
     [SerializeField] private Image OuterBackground;
     [SerializeField] private Transform spikesParent;
     [SerializeField] private Transform wallsParent;
+    [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private Color[] innerColors; // 배경 색상 배열
     [SerializeField] private Color[] outerColors; // 배경 색상 배열
 
@@ -34,6 +36,7 @@ public class BackgroundManager: MonoBehaviour
             OuterBackground.color = outerColors[index];
             foreach (var spike in spikeRenderers) spike.color = outerColors[index];
             foreach (var wall in wallRenderers) wall.color = outerColors[index];
+            scoreText.color = outerColors[index];
         }
         else
         {
