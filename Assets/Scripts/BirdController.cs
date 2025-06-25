@@ -3,11 +3,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(Rigidbody2D))]
 public class BirdController : MonoBehaviour
 {
     public static BirdController Instance; // Singleton instance for easy access
+
     public static event Action OnDirectionChanged; // Event to notify direction changes
+
     public static event Action OnDead;
 
     public Sprite birdUp;
@@ -18,11 +21,14 @@ public class BirdController : MonoBehaviour
     public float gravityScale; // Gravity scale for the Rigidbody2D component
     public float direction = 1f; // Direction multiplier for horizontal movement
 
-    private RectTransform birdUI;
+    [SerializeField] private GameObject birdUI;
+    [SerializeField] private ParticleSystem trailParticle;
+
     private Rigidbody2D rb;
-    private Image image;
+    private SpriteRenderer spriteRenderer;
     private Vector3 initialPosition;
     private bool positionInit = false;
+    private bool isPlayable = false;
     private bool isSpiked = false;
     private bool isDead = false;
 
@@ -32,15 +38,15 @@ public class BirdController : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    void Start()
+    private void Start()
     {
-        birdUI = GetComponent<RectTransform>();
         rb = GetComponent<Rigidbody2D>();
-        rb.gravityScale = gravityScale; // Set the gravity scale for the Rigidbody2D component
-        image = GetComponent<Image>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         initialPosition = transform.position;
         positionInit = true;
+
+        SetPlayable(false);
         OnDirectionChanged?.Invoke();
     }
 
@@ -49,8 +55,10 @@ public class BirdController : MonoBehaviour
         InitBird();
     }
 
-    void Update()
+    private void Update()
     {
+        if (isPlayable == false) return;
+
         if (isSpiked)
         {
             if (isDead) return;
@@ -62,11 +70,7 @@ public class BirdController : MonoBehaviour
             return;
         }
 
-        if (birdUI != null)
-        {
-            birdUI.position = transform.position;
-        }
-
+        // TODO 여기서 처리하면 안됨
         if (Mouse.current.leftButton.wasPressedThisFrame) // Check if the left mouse button was pressed this frame
         {
             AudioManager.Instance.PlayJump(); // Play jump sound
@@ -77,54 +81,89 @@ public class BirdController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isSpiked) return;
-
-        HorizontalMove();
+        if (isPlayable && !isSpiked)
+        {
+            HorizontalMove();
+        }
     }
 
-    void InitBird()
+    public void SetPlayable(bool playable)
+    {
+        if (playable)
+        {
+            InitBird(); // 시작 시 위치 등 초기화
+        }
+
+        isPlayable = playable;
+
+        gameObject.SetActive(isPlayable);
+
+        if (birdUI != null)
+        {
+            birdUI.SetActive(!isPlayable);
+        }
+
+        // 중력 설정
+        if (rb != null)
+        {
+            rb.gravityScale = isPlayable ? gravityScale : 0f;
+        }
+    }
+
+    private void InitBird()
     {
         isSpiked = false;
         isDead = false;
-        if (positionInit) transform.position = initialPosition;
-        if (image != null)
+
+        if (positionInit)
         {
-            image.color = Color.white;
+            transform.position = initialPosition;
         }
-        transform.localRotation = new Quaternion(0, 0, 0, 0);
+
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = Color.white; // Reset color to white
+        }
+        transform.localRotation = Quaternion.identity;
         direction = 1f;
+        if (transform.localScale.x < 0)
+        {
+            FlipBird();
+        }
     }
 
     public void Jump()
     {
-        if (isSpiked) return;
+        if (!isPlayable || isSpiked) return;
 
         rb.linearVelocity = new Vector2(velocityX * direction, 0); // 연속점프 초기화
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+
+        if (trailParticle != null)
+        {
+            trailParticle.transform.position = transform.position;
+            trailParticle.Play();
+        }
     }
 
-    void HorizontalMove()
+    private void HorizontalMove()
     {
         var velocity = rb.linearVelocity;
         velocity.x = velocityX * direction;
         rb.linearVelocity = velocity;
     }
 
-    void UpdateSprite()
+    private void UpdateSprite()
     {
-        if (image == null) return; // Ensure image is not null before accessing it
+        if (spriteRenderer == null) return; // Ensure image is not null before accessing it
         if (rb.linearVelocity.y > 0.1)
         {
-            image.sprite = birdUp; // Upward movement
+            spriteRenderer.sprite = birdUp; // Upward movement
         }
         else if (rb.linearVelocity.y < -0.1)
         {
-            image.sprite = birdDown; // Downward movement
+            spriteRenderer.sprite = birdDown; // Downward movement
         }
-
-        var scale = transform.localScale;
-        scale.x = rb.linearVelocityX < 0 ? -1 : 1;
-        transform.localScale = scale;
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
@@ -132,13 +171,21 @@ public class BirdController : MonoBehaviour
         if (collision.gameObject.CompareTag("Wall") && isSpiked == false)
         {
             direction *= -1f;
+            FlipBird();
             OnDirectionChanged?.Invoke();
         }
         else if (collision.gameObject.CompareTag("Spike") && isDead == false)
         {
             isSpiked = true;
-            image.color = Color.Lerp(image.color, Color.gray, 0.5f);
+            spriteRenderer.color = Color.Lerp(spriteRenderer.color, Color.gray, 0.5f);
             AudioManager.Instance.PlaySpikeHit(); // Play spike hit sound
         }
+    }
+
+    private void FlipBird()
+    {
+        var scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
     }
 }

@@ -102,15 +102,40 @@ public class GameManager : MonoBehaviour
 
     void SetState(GameState state)
     {
-        if (currentState == GameState.End && state == GameState.Play) playUI.SetActive(false);
-        currentState = state;
+        if (state == GameState.Main)
+        {
+            mainUI.SetActive(true);
 
-        mainUI.SetActive(currentState == GameState.Main);
-        endUI.SetActive(currentState == GameState.End);
-        var isPlaying = currentState == GameState.Play || currentState == GameState.End;
-        playUI.SetActive(isPlaying);
-        leftSpikes.SetActive(isPlaying);
-        rightSpikes.SetActive(isPlaying);
+            playUI.SetActive(false);
+            leftSpikes.SetActive(false);
+            rightSpikes.SetActive(false);
+            BirdController.Instance.SetPlayable(false);
+
+            endUI.SetActive(false);
+        }
+        else if (state == GameState.Play)
+        {
+            if (currentState == GameState.Main)
+            {
+                mainUI.SetActive(false);
+
+                playUI.SetActive(true);
+                leftSpikes.SetActive(true);
+                rightSpikes.SetActive(true);
+                BirdController.Instance.SetPlayable(true);
+            }
+            else // if (currentState == GameState.End)
+            {
+                endUI.SetActive(false);
+                BirdController.Instance.SetPlayable(true);
+            }
+        }
+        else // if (state == GameState.End)
+        {
+            endUI.SetActive(true);
+        }
+
+        currentState = state;
     }
 
     public void StartPlay()
