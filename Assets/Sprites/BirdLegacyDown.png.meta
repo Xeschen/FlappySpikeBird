@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      BirdLegacyDown_0: 8476712018539442948
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

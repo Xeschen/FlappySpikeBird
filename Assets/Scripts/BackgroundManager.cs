@@ -36,7 +36,7 @@ public class BackgroundManager: MonoBehaviour
             OuterBackground.color = outerColors[index];
             foreach (var spike in spikeRenderers) spike.color = outerColors[index];
             foreach (var wall in wallRenderers) wall.color = outerColors[index];
-            scoreText.color = outerColors[index];
+            scoreText.color = innerColors[index];
         }
         else
         {
