@@ -53,13 +53,13 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        BirdController.OnDirectionChanged += AddScore;
+        BirdController.OnDirectionChanged += HitWall;
         BirdController.OnDead+= EndPlay;
     }
 
     private void OnDisable()
     {
-        BirdController.OnDirectionChanged -= AddScore;
+        BirdController.OnDirectionChanged -= HitWall;
         BirdController.OnDead -= EndPlay;
     }
 
@@ -68,12 +68,13 @@ public class GameManager : MonoBehaviour
         BackgroundManager.Instance.SetBackground(score, difficultyUnit);
     }
 
-    public void AddScore()
+    public void HitWall()
     {
         score += 1;
         UpdateScoreUI();
         AudioManager.Instance.PlayBounce(); // Play bounce sound
         SpikeManager.Instance.ActivateSpike((int)BirdController.Instance.direction, score / difficultyUnit);
+        ItemManager.Instance.SpawnItem(BirdController.Instance.direction);
     }
 
     public void ResetScore()
@@ -144,11 +145,13 @@ public class GameManager : MonoBehaviour
         SetState(GameState.Play);
         IncrementPlayCount();
         SpikeManager.Instance.ActivateSpike(1, 0);
+        ItemManager.Instance.SpawnItem(1); // Spawn item at the start
 
-/*#if UNITY_EDITOR
-        Cursor.lockState = CursorLockMode.Confined;
-#endif
-*/    }
+        /*#if UNITY_EDITOR
+                Cursor.lockState = CursorLockMode.Confined;
+        #endif
+        */
+    }
 
     public void ToTitle()
     {

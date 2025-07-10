@@ -64,6 +64,7 @@ public class BirdController : MonoBehaviour
             if (rb.linearVelocity.magnitude > 1) return;
 
             isDead = true;
+            rb.constraints = RigidbodyConstraints2D.None;
             OnDead.Invoke();
 
             return;
@@ -123,6 +124,8 @@ public class BirdController : MonoBehaviour
         {
             FlipBird();
         }
+
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     public void Jump()
