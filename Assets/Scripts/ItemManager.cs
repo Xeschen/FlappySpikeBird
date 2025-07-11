@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static UnityEditor.Progress;
 
 public class ItemManager : MonoBehaviour
 {
@@ -35,6 +36,12 @@ public class ItemManager : MonoBehaviour
         Vector3 spawnPos = new Vector3(x, y, 0);
         pooledItem.transform.position = spawnPos;
         pooledItem.SetActive(true);
+
+        var itemScript = pooledItem.GetComponent<ItemController>();
+        itemScript.SetOnCollectedCallback(() => {
+            GameManager.Instance.AddItemScore(1);
+            ClearItem();
+        });
     }
 
     public void ClearItem()

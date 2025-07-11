@@ -6,21 +6,27 @@ public class GameManager : MonoBehaviour
 {
     private const string PlayCountKey = "PlayCount";
     private const string HighScoreKey = "HighScore";
+    private const string ItemScoreKey = "ItemScore";
 
     public static GameManager Instance;
     public GameState CurrentState => currentState;
 
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI mainBestScoreText;
-    public TextMeshProUGUI mainPlayCountText;
     public TextMeshProUGUI endBestScoreText;
+    public TextMeshProUGUI mainPlayCountText;
+    public TextMeshProUGUI endPlayCountText;
     public TextMeshProUGUI endNewBestScoreText;
+    public TextMeshProUGUI mainItemScoreText;
+    public TextMeshProUGUI endItemScoreText;
     private bool isBestScore = false;
 
     public int score = 0;
     public int difficultyUnit = 5;
+    
     private int highScore;
     private int playCount;
+    private int itemScore;
 
     private GameState currentState;
     [SerializeField] private GameObject mainUI;
@@ -95,9 +101,14 @@ public class GameManager : MonoBehaviour
             mainBestScoreText.text = "BEST SCORE: " + highScore.ToString();
         }
 
-        if (mainPlayCountText!= null)
+        if (mainPlayCountText != null)
         {
             mainPlayCountText.text = "GAMES PLAYED: " + playCount.ToString();
+        }
+
+        if (mainItemScoreText != null)
+        {
+            mainItemScoreText.text = itemScore.ToString();
         }
     }
 
@@ -175,8 +186,12 @@ public class GameManager : MonoBehaviour
     {
         highScore = 0;
         playCount = 0;
+        itemScore = 0;
+
         PlayerPrefs.SetInt(HighScoreKey, highScore);
         PlayerPrefs.SetInt(PlayCountKey, playCount);
+        PlayerPrefs.SetInt(ItemScoreKey, itemScore);
+
         UpdateScoreUI();
     }
 
@@ -191,6 +206,16 @@ public class GameManager : MonoBehaviour
         if (endBestScoreText != null)
         {
             endBestScoreText.text = "BEST SCORE: " + highScore.ToString();
+        }
+
+        if (endPlayCountText != null)
+        {
+            endPlayCountText.text = "GAMES PLAYED: " + playCount.ToString();
+        }
+
+        if (endItemScoreText != null)
+        {
+            endItemScoreText.text = itemScore.ToString();
         }
 
         if (endNewBestScoreText!= null)
@@ -213,6 +238,12 @@ public class GameManager : MonoBehaviour
 #endif
 */    }
 
+    public void AddItemScore(int value = 1)
+    {
+        itemScore += value;
+        PlayerPrefs.SetInt(ItemScoreKey, itemScore);
+    }
+
     private void IncrementPlayCount()
     {
         playCount += 1;
@@ -223,6 +254,7 @@ public class GameManager : MonoBehaviour
     {
         highScore = PlayerPrefs.GetInt(HighScoreKey, 0);
         playCount = PlayerPrefs.GetInt(PlayCountKey, 0);
+        itemScore = PlayerPrefs.GetInt(ItemScoreKey, 0);
     }
 }
 
